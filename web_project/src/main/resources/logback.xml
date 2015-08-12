@@ -1,0 +1,63 @@
+<configuration>
+
+    <property name="USER_HOME" value="Path/to/log/directory" />
+
+    <appender name="APPLICATION" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${USER_HOME}/application.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>${USER_HOME}/application.%d{yyyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss:SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="APP" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${USER_HOME}/app.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>${USER_HOME}/app.%d{yyyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss:SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="HIBERNATE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${USER_HOME}/hibernate.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>${USER_HOME}/hibernate.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss:SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="AUDIT" class="com.app.util.audit.AuditPublisher">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%date %-5level %logger{35} - %message%n</pattern>
+        </layout>
+    </appender>
+
+    <logger name="com.app.util.audit.AuditUtil" level="INFO">
+        <appender-ref ref="AUDIT" />
+    </logger>
+
+    <logger name="com.app" level="INFO" additivity="false">
+        <appender-ref ref="APP" />
+    </logger>
+
+    <logger name="org.hibernate" additivity="false">
+        <appender-ref ref="HIBERNATE" />
+    </logger>
+
+    <root level="debug">
+        <appender-ref ref="APPLICATION" />
+    </root>
+</configuration>
+
+
+<!-- Levels : TRACE, DEBUG, INFO, WARN, ERROR, ALL or OFF -->

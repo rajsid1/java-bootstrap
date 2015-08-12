@@ -1,0 +1,86 @@
+apply plugin: 'war'
+apply from: 'gretty.plugin'
+
+version = '1.0'
+
+apply plugin: 'idea'
+
+configurations {
+    provided
+    provided.extendsFrom(compile)
+}
+
+idea {
+    module {
+        scopes.PROVIDED.plus += [configurations.provided]
+    }
+}
+
+repositories {
+    maven {
+        url "http://www.hibernatespatial.org/repository"
+    }
+    mavenCentral()
+}
+
+dependencies {
+
+    // Jersey dependencies
+    compile 'javax.ws.rs:javax.ws.rs-api:2.0'
+    compile 'org.glassfish.jersey.core:jersey-server:2.17'
+    compile 'org.glassfish.jersey.media:jersey-media-json-jackson:2.17'
+    compile 'org.glassfish.jersey.containers:jersey-container-servlet:2.17'
+    compile "org.glassfish.jersey.media:jersey-media-multipart:2.17"
+
+    // Hibernate dependency with postgres driver
+    compile 'postgresql:postgresql:9.1-901-1.jdbc4'
+
+    compile 'org.hibernate:hibernate-core:4.3.8.Final'
+    compile 'org.hibernate:hibernate-spatial:4.3'
+    compile 'org.hibernate:hibernate-validator:5.2.0.Final'
+
+    // Apache commons - dependency
+    compile 'org.apache.commons:commons-io:1.3.2'
+
+    //dozer (Java Bean to Java Bean mapper)
+    compile 'net.sf.dozer:dozer:5.5.1'
+
+    // logger dependecies
+    compile 'ch.qos.logback:logback-classic:1.1.3'
+    compile 'javax.mail:mail:1.4'
+    compile 'javax.activation:activation:1.1.1'
+
+    //Guava - used for utility
+    compile 'com.google.guava:guava:18.0'
+
+    //Redis (Jedis)
+    compile 'redis.clients:jedis:2.7.3'
+
+    //Unirest (HTTP client)
+    compile 'com.mashape.unirest:unirest-java:1.3.0'
+
+    //Jackson (JSON handling)
+    compile 'org.codehaus.jackson:jackson-core-asl:1.9.13'
+
+    // JUnit
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
+
+test {
+    testLogging {
+        events 'started', 'passed'
+    }
+}
+
+gretty {
+    jvmArgs = [
+            '-XX:MaxPermSize=1024m',
+            '-Xms256m',
+            '-Xmx1024m']
+}
+
+//tomcat {
+//    httpPort = 9000
+//    stopPort = 9090
+//    stopKey = 'stopKey'
+//}
